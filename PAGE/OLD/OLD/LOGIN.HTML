@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONNECTEZ-VOUS</title>
+    <style>
+        /* Reset and base styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Background gradient */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        /* Login card styling */
+        .login-card {
+            background: #fff;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Logo and title */
+        .login-card h2 {
+            font-size: 1.75rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Input fields */
+        .login-card input[type="email"],
+        .login-card input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-card input[type="email"]:focus,
+        .login-card input[type="password"]:focus {
+            border-color: #4CA1AF;
+            box-shadow: 0 0 5px rgba(76, 161, 175, 0.5);
+            outline: none;
+        }
+
+        /* Remember me and button */
+        .login-card .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            margin-bottom: 1rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .login-card .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #4CA1AF;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card button:hover {
+            background-color: #1e3c72;
+            transform: scale(1.05);
+        }
+
+        /* Links */
+        .login-card .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .login-card a {
+            color: #4CA1AF;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .login-card a:hover {
+            color: #1e3c72;
+        }
+
+        /* Floating animation for logo */
+        .floating-logo {
+            width: 120px;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="/PAGE/IMAGE/ORENIGA_FULL.png" alt="ORENIGA" class="floating-logo">
+        <h2>ESPACE ORENIGA</h2>
+        <p>Bon retour! connectez vous à votre compte.</p>
+        <form>
+            <input type="email" placeholder="Nom d'Utilisateur" required id="email">
+            <input type="password" placeholder="Mot de passe " required id="password">
+            <div class="remember-me">
+                <input type="checkbox" id="remember">
+                <label for="remember">Se souvenir de moi</label>
+            </div>
+            <button type="submit" onclick="submitForm(event)">Login</button>
+        </form>
+        <div class="links">
+            <a href="#">MOT DE PASSE OUBLIER ?</a>
+            <a href="#">S'INSCRIRE</a>
+        </div>
+    </div>
+
+    <script>
+        // Adding interactive animation when clicking the login button
+        function submitForm(event) {
+            event.preventDefault(); // Prevent form submission
+            const button = event.target;
+            button.innerHTML = 'Logging in...';
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.innerHTML = 'Login';
+                button.style.transform = 'scale(1)';
+                alert("Logged in successfully!");
+            }, 2000); // Simulate a delay
+        }
+
+        // Focus animation
+        const inputs = document.querySelectorAll('input[type="email"], input[type="password"]');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.borderColor = '#4CA1AF';
+            });
+            input.addEventListener('blur', () => {
+                input.style.borderColor = '#ddd';
+            });
+        });
+    </script>
+</body>
+</html>

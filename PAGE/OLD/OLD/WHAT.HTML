@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F2F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            display: flex;
+            width: 80%;
+            height: 80vh;
+            border: 1px solid #CCC;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 30%;
+            background-color: #EDEDED;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar input {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #CCC;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .contact-list {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .contact {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+        .contact:hover {
+            background-color: #D3D3D3;
+        }
+        .contact img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-area {
+            width: 70%;
+            background-color: #FFF;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 15px;
+            border-bottom: 1px solid #EEE;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #EFEFEF;
+        }
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid #EEE;
+            display: flex;
+            align-items: center;
+        }
+        .chat-footer input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #CCC;
+        }
+        .chat-footer button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="sidebar">
+        <input type="text" placeholder="Search or start new chat">
+        <div class="contact-list">
+            <div class="contact">
+                <img src="https://via.placeholder.com/40" alt="User Avatar">
+                <span>John Doe</span>
+            </div>
+            <div class="contact">
+                <img src="https://via.placeholder.com/40" alt="User Avatar">
+                <span>Jane Smith</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-area">
+        <div class="chat-header">
+            <img src="https://via.placeholder.com/40" alt="User Avatar">
+            <div>
+                <strong>John Doe</strong>
+                <p style="margin: 0; font-size: 0.9em; color: grey;">Online</p>
+            </div>
+        </div>
+        <div class="chat-messages">
+            <!-- Messages seront affichés ici depuis la base de données -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="Type a message">
+            <button>📎</button>
+            <button>🎤</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.chat-footer input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const message = e.target.value;
+            if (message.trim()) {
+                // Logique pour insérer le message dans la base de données
+                console.log('Message:', message);
+                e.target.value = ''; // Efface le champ de saisie
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

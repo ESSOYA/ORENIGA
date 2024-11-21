@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreniga - Social Media</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* Barre latérale */
+        .sidebar {
+            width: 220px;
+            background-color: #fff;
+            padding: 20px;
+            height: 100vh;
+            border-right: 1px solid #ddd;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            color: #4e54c8;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: #333;
+            font-size: 16px;
+            padding: 10px 0;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Barre de recherche */
+        .header {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* Fil d'actualité */
+        .feed {
+            margin-bottom: 20px;
+        }
+
+        .post-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-box textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            outline: none;
+            resize: none;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #4e54c8;
+        }
+
+        .actions span {
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .actions span i {
+            margin-right: 5px;
+        }
+
+        /* Publication */
+        .post {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post-header .username {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .post-header .time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .post-content p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .post-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            color: #4e54c8;
+            cursor: pointer;
+        }
+
+        /* Liste des amis en ligne */
+        .online-friends {
+            width: 200px;
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+        }
+
+        .online-friends h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .online-friend {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .online-friend img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <div class="sidebar">
+        <h2>ORENIGA</h2>
+        <a href="#"><i>🏠</i>Home</a>
+        <a href="#"><i>👤</i>Profile</a>
+        <a href="#"><i>👥</i>Groups</a>
+        <a href="#"><i>🎥</i>Watch</a>
+        <a href="#"><i>🏬</i>Marketplace</a>
+        <a href="#"><i>🎮</i>Gaming</a>
+        <a href="#"><i>📄</i>Saved</a>
+        <a href="#"><i>📃</i>Pages</a>
+        <a href="#"><i>📅</i>Events</a>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="main-content">
+
+        <!-- Barre de recherche -->
+        <div class="header">
+            <input type="text" placeholder="Search Oreniga...">
+        </div>
+
+        <!-- Zone de publication -->
+        <div class="feed">
+            <div class="post-box">
+                <textarea placeholder="What's on your mind?"></textarea>
+                <div class="actions">
+                    <span><i>📹</i> Live Video</span>
+                    <span><i>📷</i> Photo/Video</span>
+                    <span><i>😊</i> Feeling/Activity</span>
+                </div>
+            </div>
+
+            <!-- Exemple de publication -->
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://img.icons8.com/color/48/000000/user.png" alt="User">
+                    <div>
+                        <div class="username">John Doe</div>
+                        <div class="time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>Just had an amazing day at the beach! 🌊☀️</p>
+                    <img src="https://via.placeholder.com/400x200" alt="Post image" class="post-image">
+                </div>
+                <div class="post-actions">
+                    <span>👍 Like</span>
+                    <span>💬 Comment</span>
+                    <span>↗️ Share</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des amis en ligne -->
+    <div class="online-friends">
+        <h3>Contacts</h3>
+        <div class="online-friend">
+            <img src="https://img.icons8.com/color/48/000000/user.png" alt="John Doe">
+            <span>John Doe</span>
+        </div>
+        <div class="online-friend">
+            <img src="https://img.icons8.com/color/48/000000/user.png" alt="Jane Smith">
+            <span>Jane Smith</span>
+        </div>
+        <div class="online-friend">
+            <img src="https://img.icons8.com/color/48/000000/user.png" alt="Mike Johnson">
+            <span>Mike Johnson</span>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreniga Loading</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #1a1a1a, #2c2c2c);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite, rotate3D 15s infinite linear;
+            transform-style: preserve-3d;
+        }
+
+        .loading-text {
+            color: #fff;
+            font-size: 24px;
+            margin-top: 20px;
+            letter-spacing: 3px;
+            animation: glow 2s infinite;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.7);
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 20px auto;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            left: -50%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            animation: loading 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes loading {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes rotate3D {
+            0% { transform: rotate3d(1, 1, 1, 0deg); }
+            100% { transform: rotate3d(1, 1, 1, 360deg); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(255, 107, 107, 0.7); }
+            50% { text-shadow: 0 0 20px rgba(78, 205, 196, 0.9); }
+            100% { text-shadow: 0 0 10px rgba(255, 107, 107, 0.7); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(-100vh) translateX(100vw); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #logo-svg {
+            fill: #ff6b6b;
+            animation: colorChange 3s infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5));
+        }
+
+        @keyframes colorChange {
+            0% { fill: #ff6b6b; }
+            50% { fill: #4ecdc4; }
+            100% { fill: #ff6b6b; }
+        }
+
+        .ripple {
+            position: absolute;
+            border: 2px solid rgba(255, 107, 107, 0.5);
+            border-radius: 50%;
+            animation: rippleEffect 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            0% { width: 0; height: 0; opacity: 1; }
+            100% { width: 500px; height: 500px; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-particles" id="particles"></div>
+    <div class="container">
+        <!-- Logo SVG -->
+        <svg class="logo" id="logo-svg" viewBox="0 0 100 100">
+            <path d="M50,10 C27.909,10 10,27.909 10,50 C10,72.091 27.909,90 50,90 C72.091,90 90,72.091 90,50 C90,27.909 72.091,10 50,10 Z M50,80 C33.431,80 20,66.569 20,50 C20,33.431 33.431,20 50,20 C66.569,20 80,33.431 80,50 C80,66.569 66.569,80 50,80 Z"/>
+            <path d="M50,30 L70,50 L50,70 L30,50 Z"/>
+        </svg>
+        
+        <div class="loading-bar"></div>
+        <div class="loading-text">ORENIGA</div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create ripple effect on click
+        function createRipple(event) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = event.clientX - 250 + 'px';
+            ripple.style.top = event.clientY - 250 + 'px';
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 2000);
+        }
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            document.addEventListener('click', createRipple);
+        });
+
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = '/oreniga/index.html#contact';
+        }, 3000);
+    </script>
+</body>
+</html>

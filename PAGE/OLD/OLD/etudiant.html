@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        img {
+            max-width: 150px;
+            height: auto;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mon Profil</h1>
+        
+
+        <h2>Mettre à jour la photo de profil</h2>
+        <form action="etudiant.php" method="post" enctype="multipart/form-data">
+            
+            <button type="submit">ACCEDER AU COMPTE</button>
+        </form>
+
+        <h2>Discussion avec d'autres utilisateurs</h2>
+        <a href="discussion.php">Accéder à la discussion</a>
+
+        <a href="logout.php">Se déconnecter</a>
+    </div>
+</body>
+</html>

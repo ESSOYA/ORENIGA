@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORENIGA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .main-container {
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .title-container {
+            position: relative;
+            height: 200px;
+            margin-bottom: 50px;
+        }
+
+        .main-title {
+            font-size: 120px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3),
+                         0 0 20px rgba(255,255,255,0.4);
+            margin: 0;
+            position: relative;
+            animation: titleFloat 3s ease-in-out infinite;
+            letter-spacing: 10px;
+        }
+
+        .grad-cap {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 80px;
+            color: #ffffff;
+            animation: floatingCap 4s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slogans-container {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .slogan {
+            color: #ffffff;
+            font-size: 24px;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .author {
+            position: fixed;
+            bottom: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.8s forwards;
+            animation-delay: 2s;
+            opacity: 0;
+        }
+
+        .slogan:nth-child(1) { animation-delay: 0.5s; }
+        .slogan:nth-child(2) { animation-delay: 1s; }
+        .slogan:nth-child(3) { animation-delay: 1.5s; }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 15s infinite linear;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes floatingCap {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-60%) rotate(-10deg); }
+            50% { transform: translateX(-50%) rotate(0deg); }
+            75% { transform: translateX(-40%) rotate(10deg); }
+            100% { transform: translateX(-50%) rotate(0deg); }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 60px;
+            }
+            .grad-cap {
+                font-size: 50px;
+                top: -50px;
+            }
+            .slogan {
+                font-size: 18px;
+            }
+            .author {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="main-container">
+        <div class="title-container">
+            <i class="fas fa-graduation-cap grad-cap"></i>
+            <h1 class="main-title">ORENIGA</h1>
+        </div>
+        <div class="slogans-container">
+            <div class="slogan">L'excellence académique à votre portée</div>
+            <div class="slogan">Formez-vous pour l'avenir</div>
+            <div class="slogan">Votre succès, notre priorité</div>
+            
+        </div>
+    </div>
+    <div class="author">© 2024 - Créé par ESSONGUE YANN CHERI</div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 50;
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random starting position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
+    </script>
+</body>
+</html>

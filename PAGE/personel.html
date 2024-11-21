@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quitter le Forum</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .loader-container {
+            text-align: center;
+            background: #2d2d2d;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid #3d3d3d;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin: 0 auto 30px auto;
+        }
+
+        .loader:before,
+        .loader:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #ff3366;
+        }
+
+        .loader:before {
+            animation: spin 1.5s linear infinite;
+            border-top-color: #ff3366;
+        }
+
+        .loader:after {
+            animation: spin 1s linear infinite reverse;
+            border-top-color: #00ff88;
+        }
+
+        .loading-text {
+            color: #ffffff;
+            font-size: 1.4em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+
+        .welcome-text {
+            color: #cccccc;
+            font-size: 1.2em;
+            margin: 20px 0;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .loading-tips {
+            color: #888888;
+            font-size: 1em;
+            margin-top: 15px;
+            font-weight: 400;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #3d3d3d;
+            border-radius: 2px;
+            margin: 30px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff3366, #00ff88);
+            border-radius: 2px;
+            animation: progress 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .loader-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff3366, #00ff88);
+            z-index: -1;
+            border-radius: 22px;
+            filter: blur(15px);
+            opacity: 0.15;
+        }
+
+        /* Particle effect */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: particleFloat 20s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0); }
+            100% { transform: translateY(-100vh) translateX(50px); }
+        }
+
+        @media (max-width: 480px) {
+            .loader-container {
+                padding: 25px;
+                width: 85%;
+            }
+
+            .loader {
+                width: 60px;
+                height: 60px;
+            }
+
+            .loading-text {
+                font-size: 1.2em;
+            }
+
+            .welcome-text {
+                font-size: 1em;
+            }
+
+            .loading-tips {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p class="welcome-text">Fermeture du forum...</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <p class="loading-text">Au revoir !</p>
+        <p class="loading-tips" id="loading-tips"></p>
+    </div>
+
+    <script>
+        // Loading tips logic
+        const loadingTips = [
+            "Sauvegarde de votre session...",
+            "Fermeture des discussions en cours...",
+            "Retour vers votre profil...",
+            "Déconnexion du forum...",
+            "À bientôt sur le forum !"
+        ];
+
+        let currentTip = 0;
+        
+        function updateLoadingTip() {
+            const tipElement = document.getElementById('loading-tips');
+            tipElement.textContent = loadingTips[currentTip];
+            currentTip = (currentTip + 1) % loadingTips.length;
+        }
+
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.opacity = Math.random() * 0.5;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        createParticles();
+        const tipInterval = setInterval(updateLoadingTip, 1000);
+        updateLoadingTip();
+
+        // Redirect after animation
+        setTimeout(() => {
+            clearInterval(tipInterval);
+            const container = document.querySelector('.loader-container');
+            container.style.transition = 'all 0.8s ease-out';
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                window.location.href = "personel.php";
+            }, 800);
+        }, 3000);
+    </script>
+</body>
+</html>

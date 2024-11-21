@@ -1,0 +1,129 @@
+/* Reset some default browser styles */
+body, h1, h2, h3, label, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Typography */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('/path/to/your/education-themed-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    line-height: 1.6;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    /* Adding a background overlay for better text visibility */
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+    z-index: 1;
+}
+
+h1, h2, h3, form {
+    position: relative;
+    z-index: 2;
+}
+
+/* Header Styles */
+h1 {
+    font-size: 3em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+h2, h3 {
+    font-size: 1.5em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    max-width: 400px;
+    width: 100%;
+    margin: auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff;
+    text-align: left;
+}
+
+input[type="email"], input[type="password"] {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+button[type="submit"] {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    text-decoration: none;
+    color: #fff;
+    background-color: #0056b3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #003d80;
+}
+
+/* Ensure responsive design */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    h2, h3 {
+        font-size: 1.2em;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    input[type="email"], input[type="password"] {
+        width: calc(100% - 20px);
+        padding: 8px;
+    }
+
+    button[type="submit"] {
+        font-size: 0.9em;
+        padding: 8px 16px;
+    }
+}

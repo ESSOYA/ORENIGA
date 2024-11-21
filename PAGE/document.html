@@ -1,0 +1,552 @@
+<?php
+session_start();
+$host = 'localhost';
+$dbname = 'oreniga';
+$username = 'root';
+$password = '';
+
+// Connexion à la base de données
+$conn = new mysqli($host, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Échec de la connexion : " . $conn->connect_error);
+}
+
+// Préparation de la requête SQL
+$query = "SELECT 
+    d.id AS document_id,
+    d.date AS document_date,
+    d.status AS document_status,
+    di.etu_id,
+    di.fichier_bac,
+    di.fichier_notes,
+    di.fichier_naissance,
+    di.fichier_identite,
+    di.photos_identite,
+    di.telephone,
+    e.Nom_famille AS etudiant_Nom_famille,
+    e.Prenom AS etudiant_Prenom,
+    e.Email AS etudiant_Email
+FROM 
+    documents d
+JOIN 
+    documents_inptic di ON d.document_id = di.id
+JOIN 
+    etudiant e ON di.etu_id = e.etu_id";
+
+// Préparer et exécuter la requête
+$stmt = $conn->prepare($query);
+if (!$stmt) {
+    die("Erreur lors de la préparation de la requête : " . $conn->error);
+}
+$stmt->execute();
+
+// Lier les résultats
+$stmt->bind_result(
+    $document_id,
+    $document_date,
+    $document_status,
+    $etu_id,
+    $fichier_bac,
+    $fichier_notes,
+    $fichier_naissance,
+    $fichier_identite,
+    $photos_identite,
+    $telephone,
+    $etudiant_nom_famille,
+    $etudiant_prenom,
+    $etudiant_email
+);
+
+// Récupérer et afficher les résultats
+$users = [];
+while ($stmt->fetch()) {
+    $users[] = [
+        'document_id' => $document_id,
+        'document_date' => $document_date,
+        'document_status' => $document_status,
+        'etu_id' => $etu_id,
+        'fichier_bac' => $fichier_bac,
+        'fichier_notes' => $fichier_notes,
+        'fichier_naissance' => $fichier_naissance,
+        'fichier_identite' => $fichier_identite,
+        'photos_identite' => $photos_identite,
+        'telephone' => $telephone,
+        'etudiant_nom_famille' => $etudiant_nom_famille,
+        'etudiant_prenom' => $etudiant_prenom,
+        'etudiant_email' => $etudiant_email
+    ];
+}
+
+// Fermer la requête et la connexion
+$stmt->close();
+$conn->close();
+
+// Affichage des résultats pour vérification
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Gestion des Documents par Utilisateur</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: #1a73e8;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .user-section {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .user-header {
+            background: #1a73e8;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-header h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .documents-list {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .documents-list th,
+        .documents-list td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .documents-list th {
+            background-color: #f8f9fa;
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        .documents-list tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .approve-btn {
+            background-color: #34a853;
+            color: white;
+        }
+
+        .reject-btn {
+            background-color: #ea4335;
+            color: white;
+        }
+
+        .view-btn {
+            background-color: #1a73e8;
+            color: white;
+        }
+
+        .download-btn {
+            background-color: #fbbc05;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background-color: #ffeeba;
+            color: #856404;
+        }
+
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .user-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            cursor: pointer;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h1>Tableau de Bord - Gestion des Documents</h1>
+                <p>Interface d'administration pour la validation des documents utilisateurs</p>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Etudiant</h3>
+                    <div class="number" id="users-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>En attente</h3>
+                    <div class="number" id="pending-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Approuvés</h3>
+                    <div class="number" id="approved-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Rejetés</h3>
+                    <div class="number" id="rejected-count">0</div>
+                </div>
+            </div>
+
+            <input type="text" class="search-bar" placeholder="Rechercher un utilisateur..." onkeyup="searchUsers()">
+            
+            <div id="users-container"></div>
+        </div>
+    </div>
+
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Détails du document</h2>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Données de test
+        const users = [
+            {
+                id: <?php echo htmlspecialchars($document_id); ?>,
+                name: '<?php echo htmlspecialchars($etudiant_nom_famille); ?>',
+                phone: '<?php echo htmlspecialchars($telephone); ?>',
+                documents: [
+                    { id: 1, date: '<?php echo htmlspecialchars($document_date); ?>', type: 'Carte d\'identité', status: '<?php echo htmlspecialchars($document_status); ?>', fileName: '<?php echo htmlspecialchars($fichier_identite); ?>' },
+                    { id: 2, date: '<?php echo htmlspecialchars($document_date); ?>', type: 'attestation du bac', status: '<?php echo htmlspecialchars($document_status); ?>', fileName: '<?php echo htmlspecialchars($fichier_bac); ?>' },
+                    { id: 3, date: '<?php echo htmlspecialchars($document_date); ?>', type: 'relevé de note du bac', status: '<?php echo htmlspecialchars($document_status); ?>', fileName: '<?php echo htmlspecialchars($fichier_notes); ?>' },
+                    { id: 4, date: '<?php echo htmlspecialchars($document_date); ?>', type: 'acte de naissance', status: '<?php echo htmlspecialchars($document_status); ?>', fileName: '<?php echo htmlspecialchars($fichier_naissance); ?>' },
+                    { id: 5, date: '<?php echo htmlspecialchars($document_date); ?>', type: 'photo d\'identité', status: '<?php echo htmlspecialchars($document_status); ?>', fileName: '<?php echo htmlspecialchars($photos_identite); ?>' }
+                ]
+            },
+            
+        ];
+
+        function updateStats() {
+            const allDocuments = users.flatMap(user => user.documents);
+            document.getElementById('users-count').textContent = users.length;
+            document.getElementById('pending-count').textContent = allDocuments.filter(d => d.status === 'pending').length;
+            document.getElementById('approved-count').textContent = allDocuments.filter(d => d.status === 'approved').length;
+            document.getElementById('rejected-count').textContent = allDocuments.filter(d => d.status === 'rejected').length;
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                pending: '<span class="status-badge status-pending">En attente</span>',
+                approved: '<span class="status-badge status-approved">Approuvé</span>',
+                rejected: '<span class="status-badge status-rejected">Rejeté</span>'
+            };
+            return statusMap[status] || statusMap.pending;
+        }
+
+        function calculateProgress(documents) {
+            const approved = documents.filter(d => d.status === 'approved').length;
+            return (approved / documents.length) * 100;
+        }
+
+        function renderUsers(filteredUsers = users) {
+            const container = document.getElementById('users-container');
+            container.innerHTML = filteredUsers.map(user => {
+                const progress = calculateProgress(user.documents);
+                return `
+                    <div class="user-section">
+                        <div class="user-header">
+                            <h2>${user.name} - ${user.phone}</h2>
+                            <div class="user-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%"></div>
+                                </div>
+                                <span>${Math.round(progress)}% validé</span>
+                            </div>
+                        </div>
+                        <table class="documents-list">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type de Document</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${user.documents.map(doc => `
+                                    <tr>
+                                        <td>${doc.date}</td>
+                                        <td>${doc.type}</td>
+                                        <td>${getStatusBadge(doc.status)}</td>
+                                        <td class="document-actions">
+                                            ${doc.status === 'pending' ? `
+                                                <button class="action-btn approve-btn" onclick="approveDocument(${user.id}, ${doc.id})">
+                                                    <i class="fas fa-check"></i> Approuver
+                                                </button>
+                                                <button class="action-btn reject-btn" onclick="rejectDocument(${user.id}, ${doc.id})">
+                                                    <i class="fas fa-times"></i> Rejeter
+                                                </button>
+                                            ` : ''}
+                                            <button class="action-btn view-btn" onclick="viewDocument(${user.id}, ${doc.id})">
+                                                <i class="fas fa-eye"></i> Voir
+                                            </button>
+                                            <button class="action-btn download-btn" onclick="downloadDocument(${user.id}, ${doc.id})">
+                                                <i class="fas fa-download"></i> Télécharger
+                                            </button>
+                                            <button class="action-btn delete-btn" onclick="deleteDocument(${user.id}, ${doc.id})">
+                                                <i class="fas fa-trash"></i> Supprimer
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }).join('');
+            updateStats();
+        }
+
+        function searchUsers() {
+            const searchTerm = document.querySelector('.search-bar').value.toLowerCase();
+            const filteredUsers = users.filter(user => 
+                user.name.toLowerCase().includes(searchTerm) ||
+                user.phone.includes(searchTerm)
+            );
+            renderUsers(filteredUsers);
+        }
+
+        function approveDocument(userId, docId) {
+            const user = users.find(u => u.id === userId);
+            const doc = user.documents.find(d => d.id === docId);
+            if (doc) {
+                doc.status = 'approved';
+                renderUsers();
+            }
+        }
+
+        function rejectDocument(userId, docId) {
+            const user = users.find(u => u.id === userId);
+            const doc = user.documents.find(d => d.id === docId);
+            if (doc) {
+                doc.status = 'rejected';
+                renderUsers();
+            }
+        }
+
+        function deleteDocument(userId, docId) {
+            const user = users.find(u => u.id === userId);
+            const docIndex = user.documents.findIndex(d => d.id === docId);
+            if (docIndex !== -1) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) {
+                    user.documents.splice(docIndex, 1);
+                    renderUsers();
+                }
+            }
+        }
+
+        function viewDocument(userId, docId) {
+            const user = users.find(u => u.id === userId);
+            const doc = user.documents.find(d => d.id === docId);
+            const modal = document.getElementById('viewModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <div style="padding: 20px">
+                    <p><strong>Utilisateur:</strong> ${user.name}</p>
+                    <p><strong>Téléphone:</strong> ${user.phone}</p>
+                    <p><strong>Type:</strong> ${doc.type}</p>
+                    <p><strong>Fichier:</strong> ${doc.fileName}</p>
+                    <p><strong>Date:</strong> ${doc.date}</p>
+                    <p><strong>Statut:</strong> ${getStatusBadge(doc.status)}</p>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function downloadDocument(userId, docId) {
+            const user = users.find(u => u.id === userId);
+            const doc = user.documents.find(d => d.id === docId);
+            alert(`Téléchargement du fichier: ${doc.fileName}`);
+        }
+
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Initialize the dashboard
+        renderUsers();
+    </script>
+</body>
+</html>

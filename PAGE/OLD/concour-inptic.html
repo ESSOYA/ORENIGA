@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORENIGA</title>
+    <link rel="stylesheet" href="style_1.css"> 
+</head>
+<body>
+<h1>ORENIGA</h1>
+<h2><strong>veuillez entrer les informations</strong></h2>
+<form action="INPTIC.PHP" method="post" enctype="multipart/form-data">
+    <div class="FORMULAIRE">
+        <label for="fichier_bac">Téléverser copie légalisée du bac:</label>
+        <br>
+        <input type="file" id="fichier_bac" name="fichier_bac" accept=".pdf">
+        <br>
+        <label for="fichier_notes">Téléverser le relevé de notes du bac :</label>
+        <br>
+        <input type="file" id="fichier_notes" name="fichier_notes" accept=".pdf">
+        <br>
+        <label for="fichier_naissance">Téléverser acte de naissance légalisé datant de moins de 3 mois :</label>
+        <br>
+        <input type="file" id="fichier_naissance" name="fichier_naissance" accept=".pdf">
+        <br>
+        <label for="fichier_identite">Téléverser 1 copie de la pièce d'identité:</label>
+        <br>
+        <input type="file" id="fichier_identite" name="fichier_identite" accept=".pdf">
+        <br>
+        <label for="photos_identite">Téléverser une photo d'identité en couleur :</label>
+        <br>
+        <input type="file" id="photos_identite" name="photos_identite" accept=".jpg">
+        <br>
+        <!-- Nouveau champ pour le numéro de téléphone -->
+        <label for="telephone">Entrez votre numéro de téléphone :</label>
+        <br>
+        <input type="tel" id="telephone" name="telephone" placeholder="ex: 0612345678" pattern="[0-8]{9}" required>
+        <br>
+    </div>
+    <div>
+        <button type="submit">Envoyer</button>
+    </div>
+</form>
+</body>
+</html>

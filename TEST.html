@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'inscription</title>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <form id="formulaire" onsubmit="return Verif();">
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom"><br><br>
+
+        <label for="prenom">Prénom :</label>
+        <input type="text" id="prenom" name="prenom"><br><br>
+
+        <label for="cin">CIN :</label>
+        <input type="text" id="cin" name="cin"><br><br>
+
+        <label for="email">Adresse e-mail :</label>
+        <input type="email" id="email" name="email"><br><br>
+
+        <label for="niveau">Niveau :</label>
+        <select id="niveau" name="niveau">
+            <option value="secondaire" selected>Secondaire</option>
+            <option value="superieur">Supérieur</option>
+        </select><br><br>
+
+        <label for="modules">Modules de formation (choisissez max 2) :</label><br>
+        <input type="checkbox" name="modules" value="module1"> Module 1<br>
+        <input type="checkbox" name="modules" value="module2"> Module 2<br>
+        <input type="checkbox" name="modules" value="module3"> Module 3<br><br>
+
+        <button type="submit">Envoyer</button>
+        <button type="button" onclick="annuler()">Annuler</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        // Fonction pour vérifier les conditions du formulaire
+function Verif() {
+    // Récupérer les valeurs des champs
+    let nom = document.getElementById('nom').value;
+    let prenom = document.getElementById('prenom').value;
+    let cin = document.getElementById('cin').value;
+    let email = document.getElementById('email').value;
+    let niveau = document.getElementById('niveau').value;
+    let modules = document.querySelectorAll('input[name="modules"]:checked');
+
+    // Vérification des conditions
+    if (!nom || !prenom || !cin || !email) {
+        alert("Les champs Nom, Prénom, CIN et Email doivent être remplis.");
+        return false; // Empêcher l'envoi du formulaire
+    }
+
+    // Vérifier que le CIN contient exactement 8 chiffres
+    if (!/^\d{8}$/.test(cin)) {
+        alert("Le CIN doit contenir exactement 8 chiffres.");
+        return false;
+    }
+
+    // Vérifier que l'email contient le caractère "@"
+    if (!email.includes('@')) {
+        alert("L'adresse e-mail doit comporter un '@'.");
+        return false;
+    }
+
+    // Vérifier que le niveau secondaire est sélectionné par défaut
+    if (niveau !== "secondaire") {
+        alert("Le niveau Secondaire doit être sélectionné par défaut.");
+        return false;
+    }
+
+    // Vérifier que l'utilisateur a sélectionné au maximum 2 modules
+    if (modules.length > 2 || modules.length <1) {
+        alert("Vous ne pouvez choisir que 2 modules maximum et 1 un module minimum.");
+        return false;
+    }
+
+    // Si toutes les conditions sont satisfaites, afficher un message de confirmation
+    document.getElementById('message').textContent = "Inscription achevée !!";
+    return false; // Empêcher l'envoi du formulaire pour garder la page active (en attendant un vrai traitement côté serveur)
+}
+
+// Fonction pour annuler et vider le formulaire
+function annuler() {
+    // Vider tous les champs
+    document.getElementById('formulaire').reset();
+    // Vider le message de confirmation
+    document.getElementById('message').textContent = "";
+}
+
+    </script>
+</body>
+</html>

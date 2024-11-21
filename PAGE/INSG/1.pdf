@@ -1,0 +1,123 @@
+
+Voici des réponses détaillées pour les exercices de votre devoir sur la Programmation Orientée Objet (POO) en Java :
+
+### Exercice 1: 9pts
+1. **Donnez quelques avantages de la POO**:
+   - **Modularité**: Le code est organisé en objets, ce qui facilite la maintenance et l'évolution.
+   - **Réutilisabilité**: Les classes peuvent être réutilisées dans différents programmes.
+   - **Extensibilité**: Il est facile d'ajouter de nouvelles fonctionnalités par l'héritage et le polymorphisme.
+   - **Encapsulation**: Les données sont protégées et accessibles uniquement via des méthodes définies.
+   - **Polymorphisme**: Permet d'utiliser des objets de différentes classes de manière interchangeable.
+
+2. **Quel autre type de programmation connaissez-vous ? (hormis la POO)**
+   - **Programmation procédurale**: Organisation du code en fonctions et procédures.
+   - **Programmation fonctionnelle**: Utilisation de fonctions comme unités fondamentales de calcul.
+   - **Programmation déclarative**: Spécification de ce que le programme doit accomplir sans détailler comment.
+   - **Programmation logique**: Utilisation de la logique formelle pour décrire les relations entre les données.
+
+3. **Donnez la définition des mots suivants**:
+   - **Objet**: Instance d'une classe contenant des attributs et des méthodes.
+   - **Attribut**: Variable définie dans une classe représentant une propriété de l'objet.
+   - **Méthode**: Fonction définie dans une classe opérant sur les objets de cette classe.
+   - **Héritage**: Mécanisme permettant de créer une nouvelle classe à partir d'une classe existante.
+   - **Encapsulation**: Concept de restreindre l'accès direct aux attributs d'un objet et de les manipuler via des méthodes.
+   - **Polymorphisme**: Capacité des objets de différents types de répondre à des méthodes de manière appropriée.
+
+### Exercice 2: 5pts
+4. **Expliquez la différence entre une classe mère et une classe fille**
+   - Une **classe mère** (ou superclasse) est une classe dont d'autres classes (classes filles ou sous-classes) héritent des attributs et méthodes.
+   - Une **classe fille** (ou sous-classe) est une classe dérivée d'une autre classe (classe mère), héritant ses attributs et méthodes et pouvant en définir de nouveaux ou modifier les existants.
+
+5. **Quelle est la différence de créer une classe avec ou sans un constructeur par défaut ?**
+   - **Avec constructeur par défaut**: Si aucun constructeur n'est défini, Java en génère un par défaut qui initialise les attributs avec des valeurs par défaut (0, null, etc.).
+   - **Sans constructeur par défaut**: Si un constructeur est défini explicitement, il initialise les attributs selon les paramètres passés lors de l'instanciation.
+
+6. **Donnez un exemple de création d'un objet**:
+   ```java
+   public class Personne {
+       private String nom;
+       private String prenom;
+
+       // Constructeur
+       public Personne(String nom, String prenom) {
+           this.nom = nom;
+           this.prenom = prenom;
+       }
+   }
+
+   // Création d'un objet
+   Personne p = new Personne("Jean", "Dupont");
+   ```
+
+### Exercice 3: 5pts
+7. **Définir les attributs de la classe Triangle**
+   ```java
+   public class Triangle {
+       private double base;
+       private double hauteur;
+   }
+   ```
+
+8. **Définir une méthode Surface qui retourne la surface du Triangle**
+   ```java
+   public double surface() {
+       return (base * hauteur) / 2;
+   }
+   ```
+
+9. **Définir une méthode Périmètre qui retourne le périmètre du Triangle**
+   ```java
+   public double perimetre(double coteA, double coteB) {
+       return base + coteA + coteB;
+   }
+   ```
+
+### Exercice 3: 3.5pts
+10. **Écrire un programme qui demande à l'utilisateur de saisir son nom, prénom et âge, puis le programme affiche le message "Bonjour M/Mme (nom) (prenom), vous avez (âge) ans."**
+   ```java
+   import java.util.Scanner;
+
+   public class Main {
+       public static void main(String[] args) {
+           Scanner scanner = new Scanner(System.in);
+
+           System.out.print("Entrez votre nom: ");
+           String nom = scanner.nextLine();
+
+           System.out.print("Entrez votre prénom: ");
+           String prenom = scanner.nextLine();
+
+           System.out.print("Entrez votre âge: ");
+           int age = scanner.nextInt();
+
+           System.out.println("Bonjour M/Mme " + nom + " " + prenom + ", vous avez " + age + " ans.");
+       }
+   }
+   ```
+
+### Exercice 4: 2.5pts
+11. **Écrire une classe Nombre en langage Java, permettant de donner le plus grand nombre entre deux nombres définis**
+    ```java
+    public class Nombre {
+        private int nombre1;
+        private int nombre2;
+
+        public Nombre(int nombre1, int nombre2) {
+            this.nombre1 = nombre1;
+            this.nombre2 = nombre2;
+        }
+
+        public int getPlusGrand() {
+            return Math.max(nombre1, nombre2);
+        }
+    }
+    ```
+
+12. **Définir une méthode Comparer qui retourne le plus grand entre les deux nombres définis**
+    ```java
+    public int comparer() {
+        return getPlusGrand();
+    }
+    ```
+
+Ces réponses couvrent tous les points mentionnés dans votre devoir sur la Programmation Orientée Objet. N'hésitez pas si vous avez besoin de plus de détails ou d'explications supplémentaires.

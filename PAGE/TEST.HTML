@@ -1,0 +1,310 @@
+<h1>Bonjour, <?php echo htmlspecialchars($name); ?></h1>
+    <p>Vous avez déjà un compte. Veuillez vous connecter.</p>
+    <?php if ($photo): ?>
+        <img src="<?php echo htmlspecialchars($photo); ?>" alt="Photo de profil">
+    <?php endif; ?>
+    <a href="login.php">Se connecter</a>
+
+
+
+    <img src="image_principale.jpg" alt="Image principale" id="image">
+
+<script>
+  const img = document.getElementById('image');
+
+  img.addEventListener('error', function() {
+    img.src = "image_alternative.jpg"; // Définit l'image alternative
+    img.alt = "Image alternative"; // Change aussi la description si besoin
+  });
+</script>
+
+
+
+
+INSERT INTO `administrateur` (`admin_id`, `Nom_famille`, `Prenom`, `Email`, `Mot_de_passe`, `Photo_profil`, `DATE_NAISSANCE`, `Téléphone`, `Genre`, `admin_type`, `Bio`, `Competence_info`, `Competence_marketing`, `Competence_digital`) VALUES
+(2, 'AQUILA', 'LUCIS', 'yannpateyann@gmail.com', '$2y$10$Xv4SLWlPtITIcU2dG17TjOAS/ULG0sGj87QvGNYEJe8mu2OgFoDJi', NULL, '2003-08-11', '066813542', 'HOMME', 'administrateur', NULL, NULL, NULL, NULL);
+
+
+INSERT INTO `personel` (`pers_id`, `Nom_famille`, `Prenom`, `Email`, `Mot_de_passe`, `Photo_profil`, `DATE_NAISSANCE`, `Téléphone`, `Genre`, `pers_type`, `Bio`, `Competence_info`, `Competence_marketing`, `Competence_digital`) VALUES
+(1, 'ROGUET JAVA', 'JAVASCRIPT', 'ROGUET@gmail.com', '$2y$10$Xv4SLWlPtITIcU2dG17TjOAS/ULG0sGj87QvGNYEJe8mu2OgFoDJi', NULL, '2003-08-11', '066813542', 'HOMME', 'personel', NULL, NULL, NULL, NULL);
+
+
+<?php
+// Démarre la session
+session_start();
+
+// Connexion à la base de données
+$host = 'localhost';
+$dbname = 'ORENIGA';
+$username = 'root';
+$password = '';
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Vérification de la connexion
+if ($conn->connect_error) {
+    die("Échec de la connexion: " . $conn->connect_error);
+}
+
+// Vérifie si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Récupère le nom de l'utilisateur
+    $nom = $conn->real_escape_string($_POST['nom']);
+
+    // Définit le dossier de téléchargement
+    $targetDir = "uploads/";
+
+    // Vérifie si une photo a été téléchargée
+    if (isset($_FILES['photo_profil']) && $_FILES['photo_profil']['error'] === UPLOAD_ERR_OK) {
+        $fileName = basename($_FILES['photo_profil']['name']);
+        $targetFilePath = $targetDir . $fileName;
+        $imageFileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+        // Vérifie les formats d'image autorisés
+        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+        if (in_array($imageFileType, $allowedTypes)) {
+            // Déplace le fichier téléchargé dans le dossier de destination
+            if (move_uploaded_file($_FILES['photo_profil']['tmp_name'], $targetFilePath)) {
+                // Enregistre le chemin de la photo dans la base de données
+                $sql = "INSERT INTO utilisateurs (nom, photo_profil) VALUES (?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ss", $nom, $targetFilePath);
+
+                if ($stmt->execute()) {
+                    echo "<p>Photo téléchargée et enregistrée avec succès.</p>";
+                } else {
+                    echo "<p>Erreur lors de l'enregistrement dans la base de données : " . $conn->error . "</p>";
+                }
+            } else {
+                echo "<p>Erreur lors du téléchargement de la photo.</p>";
+            }
+        } else {
+            echo "<p>Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.</p>";
+        }
+    } else {
+        echo "<p>Aucune photo téléchargée ou une erreur s'est produite.</p>";
+    }
+}
+
+$conn->close();
+?>
+
+<!-- Formulaire HTML -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Photo</title>
+</head>
+<body>
+    <h2>Télécharger une photo de profil</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        <label for="nom">Nom :</label>
+        <input type="text" name="nom" id="nom" required>
+        
+        <label for="photo_profil">Photo de profil :</label>
+        <input type="file" name="photo_profil" id="photo_profil" required>
+        
+        <button type="submit">Télécharger</button>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Dossiers</title>
+    <style>
+        /* Tes styles existants */
+
+        /* Styles pour les boutons de filtre */
+        .filter-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .filter-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+        }
+        .filter-all { background-color: #333; }
+        .filter-approved { background-color: #4CAF50; }
+        .filter-rejected { background-color: #f44336; }
+        .filter-pending { background-color: #FF9800; }
+    </style>
+</head>
+<body>
+
+    <h1>Gestion des Dossiers Étudiants</h1>
+
+    <!-- Boutons de filtre de statut -->
+    <div class="filter-buttons">
+        <button class="filter-button filter-all" onclick="filterStatus('all')">Tous</button>
+        <button class="filter-button filter-approved" onclick="filterStatus('approuvé')">Approuvé</button>
+        <button class="filter-button filter-rejected" onclick="filterStatus('rejeté')">Rejeté</button>
+        <button class="filter-button filter-pending" onclick="filterStatus('en attente')">En attente</button>
+    </div>
+
+    <!-- Ton code HTML et PHP pour afficher les étudiants et leurs documents -->
+
+    <script>
+        // Fonction pour filtrer les étudiants en fonction du statut de leurs documents
+        function filterStatus(status) {
+            var students = document.getElementsByClassName("student");
+
+            for (var i = 0; i < students.length; i++) {
+                // Récupérer tous les statuts de document pour chaque étudiant
+                var documentStatus = students[i].querySelectorAll("#statusContent");
+
+                // Convertir les statuts en texte
+                var statuses = Array.from(documentStatus).map(function(stat) {
+                    return stat.innerText.toLowerCase();
+                });
+
+                // Logique de filtrage selon le statut sélectionné
+                if (status === 'all') {
+                    students[i].style.display = "";  // Afficher tous les étudiants
+                } else if (statuses.includes(status)) {
+                    students[i].style.display = "";  // Afficher les étudiants avec le statut sélectionné
+                } else {
+                    students[i].style.display = "none";  // Masquer les autres étudiants
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Dossiers</title>
+    <style>
+        /* Styles existants */
+
+        /* Style pour le bouton de retour au menu */
+        .back-button {
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+            background-color: #007bff;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gestion des Dossiers Étudiants</h1>
+
+    <!-- Bouton pour retourner au menu -->
+    <a href="menu.php" class="back-button">Retourner au Menu</a>
+
+    <!-- Boutons de filtre de statut -->
+    <div class="filter-buttons">
+        <button class="filter-button filter-all" onclick="filterStatus('all')">Tous</button>
+        <button class="filter-button filter-approved" onclick="filterStatus('approuvé')">Approuvé</button>
+        <button class="filter-button filter-rejected" onclick="filterStatus('rejeté')">Rejeté</button>
+        <button class="filter-button filter-pending" onclick="filterStatus('en attente')">En attente</button>
+    </div>
+
+    <!-- Ton code HTML et PHP pour afficher les étudiants et leurs documents -->
+
+    <script>
+        // Fonction de filtrage (reste inchangée)
+        function filterStatus(status) {
+            var students = document.getElementsByClassName("student");
+            for (var i = 0; i < students.length; i++) {
+                var documentStatus = students[i].querySelectorAll("#statusContent");
+                var statuses = Array.from(documentStatus).map(function(stat) {
+                    return stat.innerText.toLowerCase();
+                });
+                if (status === 'all') {
+                    students[i].style.display = "";
+                } else if (statuses.includes(status)) {
+                    students[i].style.display = "";
+                } else {
+                    students[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
+<?php
+// (Code existant de connexion, requêtes, etc.)
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Dossiers</title>
+    <style>
+        /* Styles existants */
+    </style>
+</head>
+<body>
+
+<h1>Gestion des Dossiers Étudiants</h1>
+<a href="menu.php" class="back-button">Retourner au Menu</a>
+
+<?php foreach ($students as $etu_id => $student) { ?>
+    <div class="student">
+        <h2><?php echo $student['etudiant_nom_famille'] . ' ' . $student['etudiant_prenom']; ?></h2>
+        <p>Email : <?php echo $student['etudiant_email']; ?></p>
+
+        <h3>Documents :</h3>
+        <?php foreach ($student['documents'] as $document) { ?>
+            <div class="document">
+                <p><strong>Date du Document :</strong> <?php echo $document['document_date']; ?></p>
+
+                <!-- Téléchargement pour chaque document si disponible -->
+                <?php if ($document['fichier_bac']) { ?>
+                    <p>1) <strong>Attestation du BAC :</strong>
+                        <a href="download.php?file=<?php echo urlencode($document['fichier_bac']); ?>&name=<?php echo urlencode($student['etudiant_nom_famille'] . '_' . $student['etudiant_prenom'] . '_BAC'); ?>" class="btn btn-download">Télécharger</a>
+                    </p>
+                <?php } ?>
+                <?php if ($document['fichier_notes']) { ?>
+                    <p>2) <strong>Relevé de notes du BAC :</strong>
+                        <a href="download.php?file=<?php echo urlencode($document['fichier_notes']); ?>&name=<?php echo urlencode($student['etudiant_nom_famille'] . '_' . $student['etudiant_prenom'] . '_Notes'); ?>" class="btn btn-download">Télécharger</a>
+                    </p>
+                <?php } ?>
+                <!-- Ajoute d'autres documents ici si nécessaire -->
+            </div>
+        <?php } ?>
+    </div>
+<?php } ?>
+
+</body>
+</html>
+
+
+

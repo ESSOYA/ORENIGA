@@ -1,0 +1,347 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
+    
+    background-size: 200% 200%;
+    animation: gradientBackground 10s ease infinite;
+    display: flex;
+    height: 243vh;
+    margin: 0;
+
+   
+    
+    
+}
+
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+} 
+.container {
+    margin-top: 1000px;
+    max-width: 900px;
+    max-height: AUTO;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    
+    
+    
+   
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 150px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    width: 90%;
+   
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    animation: fadeIn 5s ease-out forwards;
+    margin-bottom: 100px;
+
+    
+}
+
+.container .bienvenu{
+    margin-top: 10000px;
+    max-width: 900px;
+    max-height: AUTO;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 50px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    width: 90%;
+   
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    color: #000000;
+    animation: fadeIn 5s ease-out forwards;
+    margin-bottom: 100px;
+}
+
+.container .info{
+    
+    max-width: 900px;
+    max-height: AUTO;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 50px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    width: 90%;
+    padding: 10px 0;
+    
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    color: #000000;
+    animation: fadeIn 5s ease-out forwards;
+    margin-bottom: 100px;
+}
+
+header {
+    
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+    padding: 1% 5%;
+    display: flex;
+    
+
+}
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+
+
+header .logo img {
+    
+    margin-right: 19px;
+    margin-left: -40px;
+    vertical-align: middle;
+    border-radius: 10%;
+    
+}
+
+header .logo .lo {
+    
+    margin-right: 19px;
+    margin-left: 150px;
+    vertical-align: middle;
+    border-radius: 300cm;
+
+    
+    
+}
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+header .logo a {
+    display: inline-block;
+    align-items: center;
+    color: #111;
+    
+}
+
+
+header .logo a span {
+    color: #020707;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+}
+.menu li  {
+    margin: 0 15px;
+    list-style-type: none;
+}
+.menu li a {
+    color: #111;
+    font-size: 19px;
+    position: relative;
+    transition: 0.5s;
+}
+.menu li:first-child a:hover {
+    color: #29d9d5;
+}
+.menu li:not(:first-child) a:hover {
+    color: #29d9d5;
+}
+.menu li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #29d9d5;
+    bottom: -5px;
+    left: 0;
+    transition: width 0.5s;
+}
+
+.menu li a:hover::after {
+    width: 100%;
+}
+
+.btn-reservation {
+    color: #29d9d5;
+    font-size: 14px;
+    border: 2px solid #29d9d5;
+    padding: 5px 20px;
+    transition: 0.5s;
+    font-weight: bolder;
+}
+.btn-reservation:hover {
+    background-color: #29d9d5;
+    color: #fff;
+ 
+}
+
+
+.container1 {
+    
+    margin-top: 100px;
+    
+    max-width: 900px;
+    max-height: AUTO;
+    
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 50px;
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    width: 90%;
+   
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    animation: fadeIn 5s ease-out forwards;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(60px); }
+}
+
+.floating-logo {
+    
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+input[type="file"] {
+    margin: 10px 0;
+}
+
+input[type="date"] {
+    margin: 10px 0;
+    backdrop-filter: blur(15px);
+    width: 350px;
+    text-size-adjust: 100%;
+    padding: 1%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    
+    animation: fadeIn 5s ease-out forwards;
+}
+img {
+    max-width: 250px;
+    height: auto;
+}
+button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+   
+}
+button:hover {
+    background-color: #218838;
+}
+.message {
+    color: red; /* Couleur pour les messages d'erreur */
+}
+.info{
+    
+   color: rgb(0, 0, 0);
+    
+}
+a{
+    color: rgb(17, 0, 255);
+   
+}
+.radio-group {
+    display: flex;
+    margin-bottom: 10px; 
+    margin-left: 15%;
+    margin-right: 15%;
+    justify-content: space-between;
+
+}
+.radio-group input {
+    margin-right: 5px;
+    text-align: center;
+
+
+}
+.input{
+    text-align: center;
+    padding: 8px;
+}
+select{
+    background-color:#098909;
+    cursor: pointer;
+}
+
+.bienvenu{
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    top: -100px;
+}
+
+.co{
+    color: #ffffff;
+    text-shadow: #098909;
+    text-rendering: auto;
+    text-overflow: clip;
+   
+}
+
+
+#welcome-dialog {
+    display: none; /* Masquer la boîte par défaut */
+    position: fixed; 
+
+/* Fixer la boîte de dialogue */
+    top: 50%; /* Positionner au milieu de l'écran */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrer la boîte */
+    background-color: #4CAF50; /* Couleur de fond verte */
+    color: white; 
+
+/* Couleur du texte */
+    padding: 20px; /* Espacement interne */
+    
+ /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre */
+    z-index: 1000; /* S'assurer que la boîte est au-dessus des autres éléments */
+}

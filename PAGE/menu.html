@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retour au Menu Principal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        .loader-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin: 0 auto 30px auto;
+        }
+
+        .loader:before,
+        .loader:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+        }
+
+        .loader:before {
+            animation: spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            border-top-color: #4facfe;
+        }
+
+        .loader:after {
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
+            border-top-color: #00f2fe;
+        }
+
+        .loading-text {
+            color: #ffffff;
+            font-size: 1.6em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3em;
+            margin: 20px 0;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .loading-tips {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1em;
+            margin-top: 15px;
+            font-weight: 400;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 30px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border-radius: 3px;
+            animation: progress 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(var(--moveX), var(--moveY)) rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .loader-container {
+                padding: 30px;
+                width: 85%;
+            }
+
+            .loader {
+                width: 80px;
+                height: 80px;
+            }
+
+            .loading-text {
+                font-size: 1.3em;
+            }
+
+            .welcome-text {
+                font-size: 1.1em;
+            }
+
+            .loading-tips {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="floating-shapes" id="floating-shapes"></div>
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p class="welcome-text">Redirection vers le menu principal...</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <p class="loading-text">Un instant...</p>
+        <p class="loading-tips" id="loading-tips"></p>
+    </div>
+
+    <script>
+        const loadingTips = [
+            "Préparation du menu principal...",
+            "Chargement de la page d'accueil...",
+            "Redirection en cours...",
+            "Presque terminé...",
+            "Retour au menu principal..."
+        ];
+
+        let currentTip = 0;
+        
+        function updateLoadingTip() {
+            const tipElement = document.getElementById('loading-tips');
+            tipElement.textContent = loadingTips[currentTip];
+            currentTip = (currentTip + 1) % loadingTips.length;
+        }
+
+        function createFloatingShapes() {
+            const container = document.getElementById('floating-shapes');
+            const shapeCount = 20;
+
+            for (let i = 0; i < shapeCount; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'shape';
+                
+                const size = Math.random() * 100 + 50;
+                shape.style.width = `${size}px`;
+                shape.style.height = `${size}px`;
+                
+                shape.style.left = `${Math.random() * 100}vw`;
+                shape.style.top = `${Math.random() * 100}vh`;
+                
+                const moveX = (Math.random() - 0.5) * 200;
+                const moveY = (Math.random() - 0.5) * 200;
+                shape.style.setProperty('--moveX', `${moveX}px`);
+                shape.style.setProperty('--moveY', `${moveY}px`);
+                
+                shape.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(shape);
+            }
+        }
+
+        createFloatingShapes();
+        const tipInterval = setInterval(updateLoadingTip, 1000);
+        updateLoadingTip();
+
+        setTimeout(() => {
+            clearInterval(tipInterval);
+            const container = document.querySelector('.loader-container');
+            container.style.transition = 'all 0.8s ease-out';
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                window.location.href = "/oreniga/index.html";
+            }, 800);
+        }, 3000);
+    </script>
+</body>
+</html>

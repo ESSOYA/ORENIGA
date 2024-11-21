@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion & Inscription</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #3a1c71, #d76d77, #ffaf7b);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 1000px;
+            height: 800px;
+            background: #fff;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            transition: all 0.6s ease-in-out;
+            overflow-y: auto;
+        }
+
+        .sign-up-container {
+            left: 0;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .sign-in-container {
+            left: 0;
+            z-index: 2;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .overlay {
+            background: linear-gradient(45deg, #3a1c71, #d76d77, #ffaf7b);
+            color: #fff;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-panel {
+            position: absolute;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 40px;
+            height: 100%;
+            width: 50%;
+            text-align: center;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        input, select {
+            background: #f5f5f5;
+            border: 2px solid transparent;
+            padding: 15px 20px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #d76d77;
+            outline: none;
+            background: #fff;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button {
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(45deg, #3a1c71, #d76d77);
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 15px 50px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        button.ghost {
+            background: transparent;
+            border: 2px solid #fff;
+        }
+
+        .social-container {
+            margin: 25px 0;
+        }
+
+        .social-container a {
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 8px;
+            height: 50px;
+            width: 50px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .social-container a:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+
+        a {
+            color: #d76d77;
+            text-decoration: none;
+            margin: 15px 0;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: #3a1c71;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form>
+                <h1>Créer un compte</h1>
+                <input type="text" placeholder="Nom de famille" required />
+                <input type="text" placeholder="Prénom" required />
+                <input type="tel" placeholder="Numéro de téléphone" required />
+                <input type="email" placeholder="Email" required />
+                
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="genre" value="homme" required>
+                        Homme
+                    </label>
+                    <label>
+                        <input type="radio" name="genre" value="femme" required>
+                        Femme
+                    </label>
+                </div>
+
+                <select required>
+                    <option value="">Type de compte</option>
+                    <option value="etudiant">Étudiant</option>
+                    <option value="enseignant">Enseignant</option>
+                    <option value="entreprise">Entreprise</option>
+                </select>
+
+                <input type="date" placeholder="Date de naissance" required />
+                <div class="password-container">
+                    <input type="password" placeholder="Mot de passe" required id="password-signup" />
+                    <i class="password-toggle fas fa-eye" onclick="togglePassword('password-signup')"></i>
+                </div>
+                <div class="password-container">
+                    <input type="password" placeholder="Confirmer le mot de passe" required id="confirm-password" />
+                    <i class="password-toggle fas fa-eye" onclick="togglePassword('confirm-password')"></i>
+                </div>
+                <button>S'inscrire</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form>
+                <h1>Se connecter</h1>
+                <div class="social-container">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-google"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>ou utilisez votre compte</span>
+                <input type="email" placeholder="Email" />
+                <div class="password-container">
+                    <input type="password" placeholder="Mot de passe" id="password-signin" />
+                    <i class="password-toggle fas fa-eye" onclick="togglePassword('password-signin')"></i>
+                </div>
+                <a href="#">Mot de passe oublié?</a>
+                <button>Se connecter</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Content de vous revoir!</h1>
+                    <p>Pour rester connecté avec nous, veuillez vous connecter avec vos informations personnelles</p>
+                    <button class="ghost" id="signIn">Se connecter</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Bonjour!</h1>
+                    <p>Entrez vos informations personnelles et commencez votre voyage avec nous</p>
+                    <button class="ghost" id="signUp">S'inscrire</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add('right-panel-active');
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove('right-panel-active');
+        });
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                console.log('Form submitted:', Object.fromEntries(formData));
+                
+                if (form.parentElement.classList.contains('sign-up-container')) {
+                    const password = formData.get('password');
+                    const confirmPassword = formData.get('confirm-password');
+                    if (password !== confirmPassword) {
+                        alert('Les mots de passe ne correspondent pas!');
+                        return;
+                    }
+                }
+
+                const button = form.querySelector('button');
+                button.style.background = 'linear-gradient(45deg, #4ecdc4, #4ecdc4)';
+                button.textContent = 'Succès!';
+                setTimeout(() => {
+                    button.style.background = 'linear-gradient(45deg, #3a1c71, #d76d77)';
+                    button.textContent = form.classList.contains('sign-up-container') ? 'S\'inscrire' : 'Se connecter';
+                }, 2000);
+            });
+        });
+
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.transform = 'scale(1.02)';
+                input.style.transition = 'transform 0.3s ease';
+            });
+
+            input.addEventListener('blur', () => {
+                input.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
